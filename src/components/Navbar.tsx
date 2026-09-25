@@ -6,8 +6,9 @@ import { usePathname } from "next/navigation";
 import {
   ShieldAlert,
   FileCheck2,
-  ArrowUpRight,
   ClipboardCheck,
+  FileText,
+  TrendingUp,
 } from "lucide-react";
 import { useInsurance } from "@/context/InsuranceContext";
 
@@ -21,11 +22,18 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Portofolio Polis", href: "/", icon: FileCheck2 },
-    { name: "Klaim & Adjudikasi", href: "/claims/", icon: ClipboardCheck, badge: pendingClaimsCount > 0 ? pendingClaimsCount : undefined },
+    {
+      name: "Klaim & Adjudikasi",
+      href: "/claims/",
+      icon: ClipboardCheck,
+      badge: pendingClaimsCount > 0 ? pendingClaimsCount : undefined,
+    },
+    { name: "Sertifikat Polis A4", href: "/policy/", icon: FileText },
+    { name: "Aktuaria & IBNR", href: "/actuary/", icon: TrendingUp },
   ];
 
   return (
-    <header className="border-b border-slate-800 bg-[#05091a]/90 backdrop-blur-md sticky top-0 z-40">
+    <header className="border-b border-slate-800 bg-[#05091a]/90 backdrop-blur-md sticky top-0 z-40 print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
@@ -37,7 +45,7 @@ export function Navbar() {
               <div className="flex items-center gap-2">
                 <span className="font-black text-white text-base tracking-wider">INSURSURE</span>
                 <span className="px-2 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-400 text-[10px] font-bold">
-                  INSURTECH TITAN 15
+                  TITAN 15
                 </span>
               </div>
               <p className="text-[10px] text-slate-400">Actuarial Loss Ratio &amp; Underwriting Claims ERP</p>
@@ -45,17 +53,20 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation & Live Policy Count */}
+        {/* Navigation */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#080d22] border border-slate-800 text-xs">
-            <span className="text-[10px] text-slate-400 uppercase">Polis Aktif:</span>
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#080d22] border border-slate-800 text-xs">
+            <span className="text-[10px] text-slate-400 uppercase">Aktif:</span>
             <span className="font-black text-teal-400 font-mono">{policies.length} Kontrak</span>
           </div>
 
           <nav className="flex items-center gap-1 sm:gap-2">
             {navLinks.map((link) => {
               const Icon = link.icon;
-              const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname?.startsWith(link.href);
 
               return (
                 <Link
@@ -70,27 +81,13 @@ export function Navbar() {
                   <Icon className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">{link.name}</span>
                   {link.badge !== undefined && (
-                    <span
-                      className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
-                        isActive ? "bg-slate-950 text-teal-400" : "bg-amber-500 text-slate-950"
-                      }`}
-                    >
+                    <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-rose-500 text-white font-mono leading-none">
                       {link.badge}
                     </span>
                   )}
                 </Link>
               );
             })}
-
-            <a
-              href="https://olyxmintabansos-byte.github.io/olyx-portfolio/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1.5 transition-all"
-            >
-              <span>Apex Hub</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
-            </a>
           </nav>
         </div>
       </div>
